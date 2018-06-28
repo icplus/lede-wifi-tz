@@ -1,0 +1,24 @@
+Index: LinuxART2CS10.2v4.9.379/wlan/nartlinux/ah_osdep.h
+===================================================================
+--- LinuxART2CS10.2v4.9.379.orig/wlan/nartlinux/ah_osdep.h
++++ LinuxART2CS10.2v4.9.379/wlan/nartlinux/ah_osdep.h
+@@ -457,14 +457,14 @@ extern  void ath_hal_detach(struct ath_h
+  */
+ typedef u_int32_t os_atomic_t;
+ 
+-//#define OS_ATOMIC_READ(_patomic_arg)           (*(_patomic_arg))
+-//#define OS_ATOMIC_SET(_patomic_arg, v)         InterlockedExchange(_patomic_arg, (v))
+-//#define OS_ATOMIC_ADD(v, _patomic_arg)         InterlockedExchangeAdd(_patomic_arg, (v))
++#define OS_ATOMIC_READ(_patomic_arg)           (*(_patomic_arg))
++#define OS_ATOMIC_SET(_patomic_arg, v)         InterlockedExchange(_patomic_arg, (v))
++#define OS_ATOMIC_ADD(v, _patomic_arg)         InterlockedExchangeAdd(_patomic_arg, (v))
+ #define OS_ATOMIC_INC(_patomic_arg)            ((*_patomic_arg)++)
+ #define OS_ATOMIC_DEC(_patomic_arg)            ((*_patomic_arg)--)
+-//#define OS_ATOMIC_DEC_AND_TEST(_patomic_arg)   (NdisInterlockedDecrement(_patomic_arg) == 0)
++#define OS_ATOMIC_DEC_AND_TEST(_patomic_arg)   (NdisInterlockedDecrement(_patomic_arg) == 0)
+ 
+-//#define OS_CMPXCHG(_m, _old, _new)             InterlockedCompareExchange(_m, _new, _old)
++#define OS_CMPXCHG(_m, _old, _new)             InterlockedCompareExchange(_m, _new, _old)
+ 
+ 
+ /*

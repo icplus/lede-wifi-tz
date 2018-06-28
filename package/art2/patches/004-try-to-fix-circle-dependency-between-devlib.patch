@@ -1,0 +1,17 @@
+Index: LinuxART2CS10.2v4.9.379/wlan/ah.c
+===================================================================
+--- LinuxART2CS10.2v4.9.379.orig/wlan/ah.c
++++ LinuxART2CS10.2v4.9.379/wlan/ah.c
+@@ -48,6 +48,12 @@
+ #include "ah_devid.h"
+ #include "ah_eeprom.h"
+ 
++#if defined(AR9287DLL)
++//#undef AH_SUPPORT_AR9300
++#elif defined(AR9300DLL)
++#undef AH_SUPPORT_AR5416
++#endif
++
+ #if AH_DEBUG || AH_PRINT_FILTER
+ /* HAL custom print function */
+ static void hal_print(void *ctxt, const char *fmt, va_list args)

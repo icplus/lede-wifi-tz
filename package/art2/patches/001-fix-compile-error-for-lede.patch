@@ -1,0 +1,113 @@
+Index: LinuxART2CS10.2v4.9.379/art/AnwiDriverInterface.h
+===================================================================
+--- LinuxART2CS10.2v4.9.379.orig/art/AnwiDriverInterface.h
++++ LinuxART2CS10.2v4.9.379/art/AnwiDriverInterface.h
+@@ -7,9 +7,9 @@
+ #else
+ 	#define ANWIDLLSPEC
+ #include "ah_osdep.h"
+-#ifdef __LINUX_MIPS64_ARCH__
++//#ifdef __LINUX_MIPS64_ARCH__
+ #include <linux/version.h>
+-#endif
++//#endif
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,2,0)
+ #if !defined(__LINUX_MIPS64_ARCH__) && !defined(__LINUX_ARM_ARCH__)
+ typedef unsigned int        uintptr_t;
+Index: LinuxART2CS10.2v4.9.379/devlib/qc98xx/Qc98xxEepromPrint.c
+===================================================================
+--- LinuxART2CS10.2v4.9.379.orig/devlib/qc98xx/Qc98xxEepromPrint.c
++++ LinuxART2CS10.2v4.9.379/devlib/qc98xx/Qc98xxEepromPrint.c
+@@ -6,6 +6,7 @@
+ #include <string.h>
+ #include <math.h>
+ #include <ctype.h>
++#include <sys/types.h>
+ 
+ #include "wlantype.h"
+ #include "smatch.h"
+Index: LinuxART2CS10.2v4.9.379/devlib/qc98xx/Qc98xxEepromSave.h
+===================================================================
+--- LinuxART2CS10.2v4.9.379.orig/devlib/qc98xx/Qc98xxEepromSave.h
++++ LinuxART2CS10.2v4.9.379/devlib/qc98xx/Qc98xxEepromSave.h
+@@ -1,6 +1,6 @@
+ #ifndef _QC98XX_EEPROM_SAVE_H_
+ #define _QC98XX_EEPROM_SAVE_H_
+-
++#include <sys/types.h>
+ 
+ #if defined (AP_BUILD) || defined (MDK_AP)
+ #define SWAP16(_x) ( (u_int16_t)( (((const u_int8_t *)(&_x))[0] ) |\
+Index: LinuxART2CS10.2v4.9.379/driver/linux/modules/dk_pci_bus.c
+===================================================================
+--- LinuxART2CS10.2v4.9.379.orig/driver/linux/modules/dk_pci_bus.c
++++ LinuxART2CS10.2v4.9.379/driver/linux/modules/dk_pci_bus.c
+@@ -278,7 +278,7 @@ static VOID dk_pci_resume
+ #if (CFG_64BIT == 1)
+ static struct pci_device_id dk_id_tbl[] = {
+ #else
+-static struct pci_device_id __devinitdata dk_id_tbl[] = {
++static struct pci_device_id /* __devinitdata */ dk_id_tbl[] = {
+ #endif
+ 	{ATHEROS_VENDOR_ID, 0x0011, PCI_ANY_ID, PCI_ANY_ID, 0, 0, (unsigned long)"MAUI"},
+ 	{ATHEROS_VENDOR_ID, 0x0012, PCI_ANY_ID, PCI_ANY_ID, 0, 0, (unsigned long)"OAHU"},
+@@ -306,7 +306,7 @@ static struct pci_device_id __devinitdat
+ 
+ 
+ #ifdef DK_UART
+-static struct pci_device_id __devinitdata dk_uart_id_tbl[] = {
++static struct pci_device_id /* __devinitdata */ dk_uart_id_tbl[] = {
+ 	{ATHEROS_VENDOR_ID, 0xff96, PCI_ANY_ID, PCI_ANY_ID, 0, 0, (unsigned long)"GRIFFIN_UART"},
+ 	{0,}
+ };
+@@ -487,4 +487,4 @@ INT32 bus_cfg_write
+ 
+ 	return ret;
+ }
+-#endif
+\ No newline at end of file
++#endif
+Index: LinuxART2CS10.2v4.9.379/libtlv/libtlvutil/genTxBinCmdTlv.c
+===================================================================
+--- LinuxART2CS10.2v4.9.379.orig/libtlv/libtlvutil/genTxBinCmdTlv.c
++++ LinuxART2CS10.2v4.9.379/libtlv/libtlvutil/genTxBinCmdTlv.c
+@@ -1,6 +1,7 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
++#include <sys/types.h>
+ 
+ #if defined(_HOST_SIM_TESTING)
+ #include "otaHostCommon.h"
+Index: LinuxART2CS10.2v4.9.379/os/Linux/os_if_nl.c
+===================================================================
+--- LinuxART2CS10.2v4.9.379.orig/os/Linux/os_if_nl.c
++++ LinuxART2CS10.2v4.9.379/os/Linux/os_if_nl.c
+@@ -3,6 +3,7 @@
+  * All Rights Reserved.
+  * Qualcomm Atheros Confidential and Proprietary.
+  */
++#define _GNU_SOURCE 1
+ 
+ #include <stdio.h>
+ #include <string.h>
+Index: LinuxART2CS10.2v4.9.379/wlan/nartlinux/ah_osdep.h
+===================================================================
+--- LinuxART2CS10.2v4.9.379.orig/wlan/nartlinux/ah_osdep.h
++++ LinuxART2CS10.2v4.9.379/wlan/nartlinux/ah_osdep.h
+@@ -260,6 +260,7 @@ extern  u_int32_t __ahdecl ath_hal_getup
+ 
+ #endif
+ 
++#ifndef _ENDIAN_H
+ /*
+  * Byte order/swapping support.
+  */
+@@ -287,6 +288,7 @@ __bswap32(u_int32_t _x)
+ #define __bswap32(_x)   (_x)
+ #define __bswap16(_x)   (_x)
+ #endif
++#endif /* _ENDIAN_H */
+ 
+ #ifdef QCA_PARTNER_PLATFORM
+ 
