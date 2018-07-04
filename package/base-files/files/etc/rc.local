@@ -1,7 +1,7 @@
 # Put your custom commands here that should be executed once
 # the system init finished. By default this file does nothing.
 WifiProbe wlan0 &
-telnetd &
+
 add="$(cat /sys/class/net/eth0/address)"
 ip link add link eth1 eth2 type macvlan
 ifconfig eth2 hw ether $add
